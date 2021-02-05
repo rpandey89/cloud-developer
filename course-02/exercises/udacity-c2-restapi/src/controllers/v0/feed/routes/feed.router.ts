@@ -2,6 +2,8 @@ import { Router, Request, Response } from 'express';
 import { FeedItem } from '../models/FeedItem';
 import { requireAuth } from '../../users/routes/auth.router';
 import * as AWS from '../../../../aws';
+const { Op } = require("sequelize");
+
 
 const router: Router = Router();
 
@@ -18,13 +20,28 @@ router.get('/', async (req: Request, res: Response) => {
 
 //@TODO
 //Add an endpoint to GET a specific resource by Primary Key
+router.get('/:id', async (req: Request, res: Response) => {
+    const item = await FeedItem.findAll({where: {id: {[Op.eq]: parseInt(req.params.id)}}});
+    res.send(item);
+});
 
 // update a specific resource
 router.patch('/:id', 
     requireAuth, 
     async (req: Request, res: Response) => {
-        //@TODO try it yourself
-        res.send(500).send("not implemented")
+        const {caption, url} = req.body;
+        if (!caption && !url) {
+            res.status(400).send('Send atleast one attribute from caption or url to patch!');
+        }
+        const savedItem = await FeedItem.findOne({where: {id: {[Op.eq]: parseInt(req.params.id)}}});
+        const updatedCaption = savedItem.caption != caption ? caption : savedItem.caption;
+        const updatedUrl = savedItem.url != url ? url : savedItem.url;
+        console.log(updatedCaption);
+        console.log(updatedUrl);
+        const result = await FeedItem.update({caption: updatedCaption, url: updatedUrl, updatedAt: Date(), createdAt: savedItem.createdAt}, {
+          where: {id: {[Op.eq]: parseInt(req.params.id)}}
+        });
+        res.status(201).send(result);
 });
 
 
