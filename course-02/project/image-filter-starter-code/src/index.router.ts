@@ -1,14 +1,15 @@
 import { Router, Request, Response } from 'express';
-import { FeedRouter } from './feed/routes/feed.router';
 import { UserRouter } from './users/routes/user.router';
+import { ImageRouter } from './users/routes/image.router';
 
 const router: Router = Router();
 
-router.use('/feed', FeedRouter);
 router.use('/users', UserRouter);
 
-router.get('/', async (req: Request, res: Response) => {    
-    res.send(`V0`);
+router.use('/images', ImageRouter);
+
+router.get('/', async (req: Request, res: Response) => {
+    res.send(`try apis /v0/users or /v0/images`);
 });
 
 export const IndexRouter: Router = router;

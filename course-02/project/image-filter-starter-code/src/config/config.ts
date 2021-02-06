@@ -12,11 +12,11 @@ export const config = {
   "prod": {
     "username": "",
     "password": "",
-    "database": "udagram_prod",
+    "database": "image_filter_db",
     "host": "",
     "dialect": "postgres"
   },
   "jwt": {
-    "secret": ""
+    "secret": process.env.JWTSECRET
   }
 }

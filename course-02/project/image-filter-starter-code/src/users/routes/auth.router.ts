@@ -13,7 +13,7 @@ const router: Router = Router();
 
 async function generatePassword(plainTextPassword: string): Promise<string> {
     //@TODO Use Bcrypt to Generated Salted Hashed Passwords
-    const saltRounds: number = 20;
+    const saltRounds: number = 10;
     const salt = await bcrypt.genSalt(saltRounds);
     return bcrypt.hash(plainTextPassword, salt);
 
@@ -26,7 +26,7 @@ async function comparePasswords(plainTextPassword: string, hash: string): Promis
 
 function generateJWT(user: User): string {
     //@TODO Use jwt to create a new JWT Payload containing
-    return jwt.sign(user, config.jwt.secret);
+    return jwt.sign(user.toJSON(), config.jwt.secret);
 }
 
 export function requireAuth(req: Request, res: Response, next: NextFunction) {
@@ -110,7 +110,7 @@ router.post('/', async (req: Request, res: Response) => {
     }
 
     const password_hash = await generatePassword(plainTextPassword);
-
+    console.log("password_hash", password_hash);
     const newUser = await new User({
         email: email,
         password_hash: password_hash
@@ -123,16 +123,16 @@ router.post('/', async (req: Request, res: Response) => {
         throw e;
     }
 
-    const authValid = await comparePasswords(plainTextPassword, user.password_hash);
+    const authValid = await comparePasswords(plainTextPassword, savedUser.password_hash);
 
     if(!authValid) {
             return res.status(401).send({ auth: false, message: 'Unauthorized' });
     }
 
     // Generate JWT
-    //const jwt = //generateJWT(savedUser);
+    const jwt = generateJWT(savedUser);
 
-    res.status(201).send({token: password_hash, user: savedUser.short()});
+    res.status(201).send({token: jwt, user: savedUser.short()});
 });
 
 router.get('/', async (req: Request, res: Response) => {
