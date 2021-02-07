@@ -8,8 +8,8 @@ import { V0MODELS } from './model.index';
 
 (async () => {
   await sequelize.addModels(V0MODELS);
-  await sequelize.sync();
 
+  await sequelize.sync();
 
   // Init the Express application
   const app = express();

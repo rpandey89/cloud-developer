@@ -1,6 +1,6 @@
 import { reject, resolve } from 'bluebird';
 import fs from 'fs';
-import Jimp = require('jimp');
+import Jimp from 'jimp';
 
 // filterImageFromURL
 // helper function to download, filter, and save the filtered image locally
@@ -21,7 +21,7 @@ class FileStatus {
 
 export async function filterImageFromURL(inputURL: string): Promise<FileStatus>{
     return new Promise( async resolve => {
-        let photo : Jimp;
+        let photo;
         try {
             photo = await Jimp.read(inputURL);
         } catch (err) {

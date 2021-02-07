@@ -29,7 +29,7 @@ const router: Router = Router();
 });
 
   router.get("/filteredimage", requireAuth, async (req, res) => {
-    const imageUrl: string = req.query['image_url'];
+    const imageUrl: string = req.query['image_url'] as string;
     if (!imageUrl) {
       res.status(400).send({"message": 'Please provide image url in request param "image_url"'});
     }
@@ -42,7 +42,7 @@ const router: Router = Router();
           res.status(500).send({'message': 'Something went wrong! Unable to send data'});
         case 200:
           if(fs.existsSync(fileStatus.filePath)) {
-            res.status(200).sendFile(fileStatus.filePath, async (success, err) => {
+            res.status(200).sendFile(fileStatus.filePath, async (err) => {
               await deleteLocalFiles([fileStatus.filePath]);
               console.log(`Deleted file ${fileStatus.filePath}`)
             });
