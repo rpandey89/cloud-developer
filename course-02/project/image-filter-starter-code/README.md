@@ -6,7 +6,7 @@ The project is split into three parts:
 1. [The Simple Frontend](https://github.com/udacity/cloud-developer/tree/master/course-02/exercises/udacity-c2-frontend)
 A basic Ionic client web application which consumes the RestAPI Backend. [Covered in the course]
 2. [The RestAPI Backend](https://github.com/udacity/cloud-developer/tree/master/course-02/exercises/udacity-c2-restapi), a Node-Express server which can be deployed to a cloud service. [Covered in the course]
-3. [The Image Filtering Microservice](https://github.com/udacity/cloud-developer/tree/master/course-02/project/image-filter-starter-code), the final project for the course. It is a Node-Express application which runs a simple script to process images. [Your assignment]
+3. [The Image Filtering Microservice](https://github.com/udacity/cloud-developer/tree/master/course-02/project/image-filter-starter-code), the final project for the course. It is a Node-Express application which runs a simple script to process images. This project takes care of that microservice.
 
 ## Tasks
 
@@ -17,15 +17,12 @@ You'll need to create a new node server. Open a new terminal within the project 
 1. Initialize a new project: `npm i`
 2. run the development server with `npm run dev`
 
-### Create a new endpoint in the server.ts file
+### Endpoints in the project are
 
-The starter code has a task for you to complete an endpoint in `./src/server.ts` which uses query parameter to download an image from a public URL, filter the image, and return the result.
+* POST /v0/users/auth/ - Url to create an authorized user. Request Body {"email": "", "password_hash": ""} is required. Response Body {"token": "", "user": {"email": ""}}.
+* GET /v0/images/filteredimage?image_url={image_url} - Required header "Authorization": "Bearer {jwt_token_obtained_from_above_request}"
 
-We've included a few helper functions to handle some of these concepts and we're importing it for you at the top of the `./src/server.ts`  file.
-
-```typescript
-import {filterImageFromURL, deleteLocalFiles} from './util/util';
-```
+For reference, we can import `cloud-cdnd-c2-final.postman_collection.json` in postman to use the endpoints.
 
 ### Deploying your system
 
